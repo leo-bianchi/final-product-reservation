@@ -3,7 +3,7 @@
 client_id = "f14c7ca1e89043d51b3f5a9546d41f4a"
 name = "final-product-reservation"
 handle = "final-product-reservation"
-application_url = "https://example.com/"
+application_url = "https://final-product-reservation.onrender.com"
 embedded = true
 
 [build]
@@ -22,10 +22,10 @@ api_version = "2025-07"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "write_products"
+scopes = "write_products,read_products,write_customers,read_customers"
 
 [auth]
-redirect_urls = [ "https://example.com/api/auth" ]
+redirect_urls = [ "https://final-product-reservation.onrender.com/api/auth" ]
 
 [pos]
 embedded = false
