@@ -57,7 +57,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 `);
 
 const testJson = await productTest.json();
-console.dir(testJson, { depth: null });
+console.log("🚀 ~ action ~ testJson:")
+console.log(testJson, { depth: null });
 
 
     // Define metafields
@@ -77,9 +78,7 @@ console.dir(testJson, { depth: null });
         type: "single_line_text_field",
       },
     ];
-
-    console.log(metafields)
-
+    
     // Send metafieldsSet mutation
     const result = await admin?.graphql(
       `
