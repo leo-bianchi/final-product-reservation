@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = "postgresql://reservation_db_h6x0_user:uPV7tfR1eDUGCvlJsztYd48DV8A4ehwt@dpg-d23si03e5dus73b25v00-a.oregon-postgres.render.com/reservation_db_h6x0"
 }
 
 model Session {
