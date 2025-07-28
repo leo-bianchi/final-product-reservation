@@ -27,6 +27,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   try {
     const body = await request.json();
     const { productId, cartId, customerId, shop } = body;
+    console.log("🚀 ~ action ~ productId:", productId)
+
+    
 
     if (!productId || !cartId || !shop) {
       return json(
@@ -43,6 +46,16 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     // Authenticate with Shopify
     const { admin } = await authenticate.public.appProxy(request);
+
+    console.log("Authenticated shop:", admin.shop); // shop domain like my-store.myshopify.com
+    console.log("Provided shop:", shop);
+
+    const restProduct = await admin.rest.get({
+      path: `products/45993154085018.json`
+    });
+
+    console.dir(restProduct, { depth: null });
+
 
     // Define metafields
     const metafields = [
