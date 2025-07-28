@@ -14,7 +14,7 @@ const prisma = new PrismaClient();
 
 const shopify = shopifyApp({
   apiKey: process.env.SHOPIFY_API_KEY!,
-  apiSecretKey: process.env.SHOPIFY_API_SECRET!,
+  apiSecretKey: process.env.SHOPIFY_API_SECRET || '',
   apiVersion: "2025-07" as typeof LATEST_API_VERSION,
   scopes: process.env.SCOPES?.split(",") || ["read_products", "write_products"],
   appUrl: process.env.SHOPIFY_APP_URL || "",
