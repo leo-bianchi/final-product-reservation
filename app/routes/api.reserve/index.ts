@@ -142,7 +142,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         cartId: reservation.cartId,
         customerId: reservation.customerId,
         isReserved: reservation.isReserved,
-        createdAt: reservation.createdAt
+        createdAt: reservation.createdAt,
+        metafieldResults: metafieldResults
       }
     }, {
       headers: corsHeaders
