@@ -47,13 +47,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     // Authenticate with Shopify
     const { admin } = await authenticate.public.appProxy(request);
 
-    const session = await authenticate.public.appProxy(request);
-
-    console.log("Shopify App Proxy session:", session);
-
-    console.log("Authenticated shop:", admin.shop); // shop domain like my-store.myshopify.com
-    console.log("Provided shop:", shop);
-
     const productTest = await admin.graphql(`
   query {
     product(id: "gid://shopify/Product/45993154085018") {
