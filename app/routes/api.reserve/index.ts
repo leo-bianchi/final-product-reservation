@@ -47,20 +47,22 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     // Define metafields
     const metafields = [
       {
-        ownerId: `gid://shopify/Product/${productId}`,
+        ownerId: `gid://shopify/Product/${productId.toString()}`,
         namespace: "reservation",
         key: "is_reserved",
         value: "true",
         type: "boolean",
       },
       {
-        ownerId: `gid://shopify/Product/${productId}`,
+        ownerId: `gid://shopify/Product/${productId.toString()}`,
         namespace: "reservation",
         key: "cart_id",
         value: cartId.toString(),
         type: "single_line_text_field",
       },
     ];
+
+    console.log(metafields)
 
     // Send metafieldsSet mutation
     const result = await admin?.graphql(
