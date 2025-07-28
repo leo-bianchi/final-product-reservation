@@ -47,38 +47,53 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     // Authenticate with Shopify
     const { admin } = await authenticate.public.appProxy(request);
 
-    const productTest = await admin.graphql(`
-  query {
-    product(id: "gid://shopify/Product/45993154085018") {
-      id
-      title
+    // Step 1: Convert numeric variant ID to GID
+    const variantGID = `gid://shopify/ProductVariant/${productId}`;
+
+    // Step 2: Query for the parent product ID
+    const variatQuery = `
+      query getProductFromVariant($id: ID!) {
+        productVariant(id: $id) {
+          id
+          product {
+            id
+          }
+        }
+      }
+    `;
+
+    const variables = {
+      id: variantGID,
+    };
+
+    const variantResult = await admin?.graphql(variatQuery, { variables });
+
+    const variantResponse = await variantResult?.json();
+    const realProductGID = variantResponse?.data?.productVariant?.product?.id;
+    console.log("🚀 ~ action ~ realProductGID:", realProductGID)
+
+    if (!realProductGID) {
+      throw new Error("Could not resolve product ID from variant ID");
     }
-  }
-`);
-
-const testJson = await productTest.json();
-console.log("🚀 ~ action ~ testJson:")
-console.log(testJson, { depth: null });
-
 
     // Define metafields
     const metafields = [
       {
-        ownerId: `gid://shopify/Product/${productId.toString()}`,
+        ownerId: `${realProductGID.toString()}`,
         namespace: "reservation",
         key: "is_reserved",
         value: "true",
         type: "boolean",
       },
       {
-        ownerId: `gid://shopify/Product/${productId.toString()}`,
+        ownerId: `${realProductGID.toString()}`,
         namespace: "reservation",
         key: "cart_id",
         value: cartId.toString(),
         type: "single_line_text_field",
       },
     ];
-    
+
     // Send metafieldsSet mutation
     const result = await admin?.graphql(
       `
@@ -124,7 +139,7 @@ console.log(testJson, { depth: null });
     const reservation = await prisma.productReservation.upsert({
       where: {
         productId_cartId: {
-          productId: productId.toString(),
+          productId: realProductGID.toString(),
           cartId: cartId.toString(),
         },
       },
@@ -134,7 +149,7 @@ console.log(testJson, { depth: null });
         updatedAt: new Date(),
       },
       create: {
-        productId: productId.toString(),
+        productId: realProductGID.toString(),
         cartId: cartId.toString(),
         customerId: customerId?.toString() || null,
         isReserved: true,
