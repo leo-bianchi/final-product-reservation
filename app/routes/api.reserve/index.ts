@@ -54,11 +54,17 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     console.log("Authenticated shop:", admin.shop); // shop domain like my-store.myshopify.com
     console.log("Provided shop:", shop);
 
-    const restProduct = await admin.rest.get({
-      path: `products/45993154085018.json`
-    });
+    const productTest = await admin.graphql(`
+  query {
+    product(id: "gid://shopify/Product/45993154085018") {
+      id
+      title
+    }
+  }
+`);
 
-    console.dir(restProduct, { depth: null });
+const testJson = await productTest.json();
+console.dir(testJson, { depth: null });
 
 
     // Define metafields
